@@ -1,0 +1,311 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to right, #2c3e50, #34495e); /* Gradient background */
+}
+
+.dashboard-container {
+    display: flex;
+    height: 100vh;
+}
+
+h1{
+    font-size: 40px;
+    margin-bottom: 20px;
+    position: absolute;
+    right: 350px;
+    bottom: 5px;
+}
+.dashboard-header {
+    width: 100%;
+    height: 60px;
+    background: linear-gradient(to right, #2980b9, #6dd5ed); /* Gradient for header */
+    color: white;
+    text-align: center;
+    padding: 15px;
+    position: fixed;
+    top: 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Shadow for depth */
+}
+
+.dashboard-sidebar {
+    width: 250px;
+    background: linear-gradient(to bottom, #34495e, #2c3e50); /* Sidebar gradient */
+    padding-top: 70px; /* Avoid overlap with header */
+    position: fixed;
+    height: 100%;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-btn {
+    width: 100%;
+    padding: 15px;
+    background-color: transparent;
+    border: none;
+    color: white;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s; /* Transition for hover effect */
+    font-size: 16px;
+    position: relative; /* For pseudo-elements */
+}
+
+.sidebar-btn::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    height: 100%;
+    width: 4px; /* Indicator line */
+    background: #6dd5ed; /* Indicator color */
+    transform: scaleY(0); /* Initially hidden */
+    transition: transform 0.3s;
+}
+
+.sidebar-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Light background on hover */
+    color: #6dd5ed; /* Change text color */
+}
+
+.sidebar-btn:hover::before {
+    transform: scaleY(1); /* Show indicator line on hover */
+}
+
+.dashboard-content {
+    margin-left: 250px; /* Match with sidebar width */
+    padding: 80px 20px;
+    width: calc(100% - 250px);
+    background: linear-gradient(to top, #f4f4f4, #dcdcdc); /* Content area gradient */
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Form Styling */
+form {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.8)); /* Gradient background with transparency */
+    padding: 40px; /* Increased padding for more space */
+    border-radius: 15px; /* More pronounced rounded corners */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Deeper shadow for depth */
+    max-width: 500px; /* Maximum width */
+    margin: 20px auto; /* Centered form */
+    transition: transform 0.3s ease; /* Smooth transition for hover effect */
+}
+
+#delete_form{
+    padding: 0%;
+}
+
+form:hover {
+    transform: scale(1.02); /* Slightly increase size on hover */
+}
+
+label {
+    display: block;
+    margin-bottom: 10px; /* Increased margin for spacing */
+    font-weight: bold;
+    font-size: 1.1em; /* Larger font size for labels */
+    color: #34495e; /* Slightly lighter darker label color */
+}
+
+input[type="number"],
+select,
+textarea,
+input[type="datetime-local"] {
+    width: 95%; /* Full width inputs */
+    padding: 12px; /* Increased padding for comfort */
+    margin-bottom: 20px; /* Space below inputs */
+    border: 1px solid #ccc; /* Border color */
+    border-radius: 8px; /* Rounded corners for inputs */
+    font-size: 16px; /* Font size for inputs */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow for inputs */
+    transition: border 0.3s, box-shadow 0.3s; /* Transition on focus */
+}
+
+select{
+    width: 100%;
+}
+
+input[type="number"]:focus,
+select:focus,
+textarea:focus,
+input[type="datetime-local"]:focus {
+    border-color: #3498db; /* Focus border color */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Shadow on focus */
+}
+
+textarea {
+    resize: none; /* Prevent resizing of the textarea */
+    height: 120px; /* Increased height for textarea */
+}
+
+.form-btn {
+    width: 100%; /* Full width button */
+    background: linear-gradient(135deg, #4CAF50, #3cb371); /* Gradient for buttons */
+    color: white; /* White text for contrast */
+    padding: 14px; /* Padding for button */
+    border: none; /* No border */
+    border-radius: 8px; /* Rounded corners for button */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 18px; /* Larger font size for button */
+    transition: background 0.3s ease, transform 0.2s ease; /* Transition effects */
+}
+
+.form-btn:hover {
+    background: linear-gradient(135deg, #45a049, #2e8b57); /* Darker gradient on hover */
+    transform: scale(1.05); /* Slight scale effect */
+}
+
+h2 {
+    font-size: 40px; /* Increased font size */
+    font-weight: bolder; /* Bolder text */
+    text-align: center; /* Center align */
+    color: #34495e; /* Darker heading color */
+    margin: 20px 0; /* Margin for spacing */
+}
+
+
+/* Style for the transaction table */
+.transaction-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    text-align: left;
+    background: rgba(255, 255, 255, 0.9); /* Table background */
+    border-radius: 8px; /* Rounded corners */
+    overflow: hidden; /* For border radius effect */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.transaction-table th, .transaction-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+}
+
+.transaction-table th {
+    background: linear-gradient(to right, #3498db, #8e44ad); /* Gradient for header */
+    color: white; /* White text for header */
+    font-weight: bold;
+}
+
+.transaction-table tr:nth-child(even) {
+    background-color: rgba(240, 240, 240, 0.8); /* Light gray for even rows */
+}
+
+.transaction-table tr.income {
+    background-color: rgba(144, 238, 144, 0.7); /* Light green */
+}
+
+.transaction-table tr.expense {
+    background-color: rgba(255, 99, 71, 0.7); /* Light red */
+}
+
+.transaction-table tr:hover {
+    background-color: rgba(220, 220, 220, 0.8); /* Hover effect */
+}
+
+.transaction-table td {
+    color: #333;
+}
+
+.transaction-table td.amount {
+    font-weight: bold;
+    color: #2980b9; /* Amount color */
+}
+
+.transaction-table .btn-danger {
+    background-color: #e74c3c; /* Red color for delete */
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Optional: Add icon within button */
+.transaction-table .btn-danger::before {
+    content: '🗑️'; /* Trash icon (can use Unicode or Font Awesome) */
+    margin-right: 5px;
+    font-size: 16px; /* Slightly larger icon size */
+}
+
+/* Hover and Focus Effect */
+.transaction-table .btn-danger:hover {
+    background-color: #c0392b; /* Darker red on hover */
+    transform: scale(1.05); /* Slightly larger on hover */
+}
+
+.transaction-table .btn-danger:focus {
+    outline: 2px solid #e74c3c; /* Focus outline for accessibility */
+}
+
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .transaction-table th, .transaction-table td {
+        padding: 8px;
+    }
+}
+
+.dashboard-content p {
+    font-weight: bolder;
+    font-size: 35px;
+    text-align: start; /* Center text for balance display */
+    color: #2c3e50; /* Darker color */
+}
+
+#subhead1{
+    font-size: 35px;
+    color: #2980b9;
+}
+
+#subhead2{
+    font-size: 35px;
+    color: #ccc;
+}
+
+/* Additional CSS */
+.chart-container {
+    width: 50%;
+    margin: auto;
+    text-align: center;
+    position: relative;
+}
+
+.no-data-msg {
+    font-size: 1.8rem;
+    color: #777;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.transaction-table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+.transaction-table thead {
+    background-color: #f0f0f0;
+}
+
+.no-transactions-msg {
+    text-align: center;
+    color: #888;
+    font-style: italic;
+    padding: 20px 0;
+}

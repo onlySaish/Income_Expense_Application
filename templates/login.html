@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="/static/login.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}"> -->
+    <style>
+        .swal2-html {
+            font-size: 1.5rem;  
+        }
+    </style>
+</head>
+<body>
+
+    <h1>INCOME EXPENSE TRACKER</h1>
+    <!-- User Login  -->
+    <div class="container">
+        <div class="form-container" id="form-container">
+            <!-- User Login Form -->
+            <div class="form login-form">
+                <span class="login">USER LOGIN</span>
+                <form id="login_form" action="/" method="POST">
+                    <div id="username">
+                        <input type="text" placeholder="Username" class="username" name="username" required> 
+                    </div>
+                    <div id="email">
+                        <input type="email" placeholder="Email ID" class="user_id" name="user_id" required> 
+                    </div>
+                    <div id="email-pass">
+                        <input type="password" placeholder="Password" class="pass" name="password" id="password" required>
+                        <img src="{{ url_for('static', filename='eye-close.png') }}" id="eyeicon" class="eyeimage">
+                    </div>
+                    <button type="submit" class="login_button">LOGIN</button>
+                </form>
+                <span class="toggle" id="toEmployee">Are you a new user? Sign up</span>
+            </div>
+    
+            <!-- Signup Form -->
+            <div class="form signup-form">
+                <span class="login">SIGN UP</span>
+                <form id="signup_form" action="/signup" method="POST">
+                    <div id="username">
+                        <input type="text" placeholder="Username" class="username" name="username" required> 
+                    </div>
+                    <div id="email">
+                        <input type="email" placeholder="Email ID" class="user_id" name="user_id" required> 
+                    </div>
+                    <div id="email-pass">
+                        <input type="password" placeholder="Password" class="pass" name="password" id="signup_password" required> 
+                        <img src="{{ url_for('static', filename='eye-close.png') }}" id="eyeicon2" class="eyeimage">
+                    </div>
+                    <button type="submit" class="login_button">SIGN UP</button>
+                </form>
+                <span class="toggle" id="toUser">Already a User? Login</span>
+            </div>
+        </div>
+    </div>
+    
+        </div>
+    </div>
+
+    <script>
+        function togglePasswordVisibility(eyeIcon, passwordInput) {
+            eyeIcon.onclick = function() {``
+                if (passwordInput.type === "password") {
+                    passwordInput.type = "text";
+                    eyeIcon.src = "{{ url_for('static', filename='eye-open.png') }}"; // Change to open eye icon
+                } else {
+                    passwordInput.type = "password";
+                    eyeIcon.src = "{{ url_for('static', filename='eye-close.png') }}"; // Change to closed eye icon
+                }
+            }
+        }
+        
+        // Get elements for user login
+        let eyeiconUser = document.getElementById("eyeicon");
+        let passwordUser = document.getElementById("password");
+        togglePasswordVisibility(eyeiconUser, passwordUser);
+        
+        // Get elements for employee login
+        let eyeiconEmployee = document.getElementById("eyeicon2");
+        let passwordEmployee = document.getElementById("signup_password");
+        togglePasswordVisibility(eyeiconEmployee, passwordEmployee);
+
+        const formContainer = document.getElementById('form-container');
+        const toEmployee = document.getElementById('toEmployee');
+        const toUser = document.getElementById('toUser');
+
+        toEmployee.addEventListener('click', () => {
+            formContainer.style.transform = 'rotateY(180deg)';
+        });
+
+        toUser.addEventListener('click', () => {
+            formContainer.style.transform = 'rotateY(0deg)';
+        });
+    
+        document.addEventListener('DOMContentLoaded', function () {
+            // Check if there are flash messages
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                    Swal.fire({
+                        icon: '{{ category }}',
+                        title: '{{ message }}',
+                        showConfirmButton: false,
+                        timer: 3000, // Optional: auto-close after 3 seconds
+                        position: 'top-end', // Position of the popup
+                        toast: true, // Optional: make it a toast
+                        backdrop: false, // Optional: disable backdrop
+                        customClass: {
+                            html: 'swal2-html'  // Apply custom class for text styling
+                        }
+                    });
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+        });
+    </script>
+</body>
+</html>

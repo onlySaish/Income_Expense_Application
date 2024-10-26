@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WALLET</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="/static/dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .swal2-html {
+            font-size: 1.5rem;  /* Adjust the font size as needed */
+            /* You can add more styles here if needed */
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <h1>WELCOME, {{ username }}</h1>
+        </header>
+    
+        <!-- Sidebar -->
+        <aside class="dashboard-sidebar">
+            <button class="sidebar-btn" id="wallet-btn">Wallet</button>
+            <button class="sidebar-btn" id="add-income-btn">Add Income</button>
+            <button class="sidebar-btn" id="add-expense-btn">Add Expense</button>
+            <button class="sidebar-btn" id="logout-btn">Logout</button>
+        </aside>
+    
+        <!-- Main Content -->
+        <main class="dashboard-content">
+            <div id="wallet-tab" class="tab-content">
+                <h2>WALLET</h2>
+                <p>BALANCE: ${{ balance }}</p>
+                <h3 id="subhead1">Income and Expense Distribution</h3>
+                <div class="chart-container">
+                    <canvas id="incomeExpenseChart" width="400" height="400"></canvas>
+                    <span id="no-data" class="no-data-msg" style="display: none;">No Data Available</span>
+                </div>
+    
+                <h3 id="subhead2">Transaction History</h3>
+                <table class="transaction-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Category</th>
+                            <th>Amount</th>
+                            <th>Payment Method</th>
+                            <th>Notes</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if transactions|length == 0 %}
+                            <tr>
+                                <td colspan="7" class="no-transactions-msg">No Transactions Available</td>
+                            </tr>
+                        {% else %}
+                            {% for transaction in transactions %}
+                            <tr class="{{ 'income' if transaction.type == 'income' else 'expense' }}">
+                                <td>{{ transaction.date.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                                <td>{{ transaction.type.capitalize() }}</td>
+                                <td>{{ transaction.category }}</td>
+                                <td class="amount">${{ transaction.amount }}</td>
+                                <td>{{ transaction.payment_method }}</td>
+                                <td>{{ transaction.notes }}</td>
+                                <td>
+                                    <form action="{{ url_for('delete_transaction', transaction_id=transaction.id) }}" method="POST" style="display:inline;" id="delete_form">
+                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            <div id="add-income-tab" class="tab-content"> 
+                <h2>ADD INCOME</h2>
+                <form id="add-income-form" action="/add_income" method="POST">
+                    <label for="income-amount">Income Amount:</label>
+                    <input type="number" id="income-amount" name="income_amount" required>
+                    
+                    <label for="income-category">Category:</label>
+                    <select id="income-category" name="income_category">
+                        <option value="salary">Salary</option>
+                        <option value="freelancing">Freelancing</option>
+                        <option value="investment">Investment</option>
+                        <option value="gift">Gift</option>
+                        <option value="other">Other</option>
+                    </select>
+                    
+                    <label for="income-method">Payment Method:</label>
+                    <select id="income-method" name="income_payment_method">
+                        <option value="bank">Bank</option>
+                        <option value="cash">Cash</option>
+                        <option value="card">Card</option>
+                        <option value="other">Other</option>
+                    </select>
+    
+                    <label for="income-notes">Notes (Optional):</label>
+                    <textarea id="income-notes" name="income_notes" placeholder="Add any notes here..."></textarea>
+    
+                    <label for="income-date">Date & Time:</label>
+                    <input type="datetime-local" id="income-date" name="income_date" required>
+    
+                    <button type="submit" class="form-btn">Add Income</button>
+                </form>
+            </div>
+            <div id="add-expense-tab" class="tab-content">
+                <h2>ADD EXPENSE</h2>
+                <form id="add-expense-form" action="/add_expense" method="POST">
+                    <label for="expense-amount">Expense Amount:</label>
+                    <input type="number" id="expense-amount" name="expense_amount" required>
+                    
+                    <label for="expense-category">Category:</label>
+                    <select id="expense-category" name="expense_category">
+                        <option value="food">Food</option>
+                        <option value="travel">Travel</option>
+                        <option value="shopping">Shopping</option>
+                        <option value="entertainment">Entertainment</option>
+                        <option value="other">Other</option>
+                    </select>
+                    
+                    <label for="expense-method">Payment Method:</label>
+                    <select id="expense-method" name="expense_payment_method">
+                        <option value="bank">Bank</option>
+                        <option value="cash">Cash</option>
+                        <option value="card">Card</option>
+                        <option value="other">Other</option>
+                    </select>
+    
+                    <label for="expense-notes">Notes (Optional):</label>
+                    <textarea id="expense-notes" name="expense_notes" placeholder="Add any notes here..."></textarea>
+    
+                    <label for="expense-date">Date & Time:</label>
+                    <input type="datetime-local" id="expense-date" name="expense_date" required>
+    
+                    <button type="submit" class="form-btn">Add Expense</button>
+                </form>
+            </div>
+        </main>
+    </div>
+    
+
+    <script>
+
+        const ctx = document.getElementById('incomeExpenseChart').getContext('2d');
+    const income = {{ income | tojson }};
+    const expense = {{ expense | tojson }};
+
+    if (income === 0 && expense === 0) {
+        document.getElementById('no-data').style.display = 'block';
+    } else {
+        const data = {
+            labels: ['Income', 'Expense'],
+            datasets: [{
+                label: 'Income and Expense',
+                data: [income, expense],
+                backgroundColor: ['#28a745', '#dc3545']
+            }]
+        };
+
+        new Chart(ctx, {
+            type: 'pie',
+            data: data,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top' },
+                    title: { display: true, text: 'Income vs Expense Distribution' }
+                }
+            }
+        });
+    }
+        document.getElementById('logout-btn').addEventListener('click', function() {
+            // Redirect to the Flask logout route
+            window.location.href = "{{ url_for('logout') }}";
+        });
+
+        document.getElementById('wallet-btn').addEventListener('click', function() {
+            showTab('wallet-tab');
+        });
+        
+        document.getElementById('add-income-btn').addEventListener('click', function() {
+            showTab('add-income-tab');
+        });
+        
+        document.getElementById('add-expense-btn').addEventListener('click', function() {
+            showTab('add-expense-tab');
+        });
+        
+        function showTab(tabId) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+        
+            // Show selected tab
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            showTab('wallet-tab');  // Call the function to show the Wallet tab
+        });
+        
+            document.addEventListener('DOMContentLoaded', function () {
+                // Check if there are flash messages
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    {% for category, message in messages %}
+                        Swal.fire({
+                            icon: '{{ category|safe }}',  // Make sure category is safely injected
+                            title: '{{ message|safe }}',  // Make sure message is safely injected
+                            showConfirmButton: false,
+                            timer: 3000,
+                            position: 'top-end',
+                            toast: true,
+                            backdrop: false,
+                            customClass: {
+                                html: 'swal2-html'  // Apply custom class for text styling
+                            }
+                        });
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
+            });
+            
+    </script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Consistent box-sizing */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-image: url(background.avif);
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: flex; /* Centering the container */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+}
+
+.container {
+    width: 400px;
+    height: 400px;
+    perspective: 1000px; /* Needed for 3D effect */
+}
+
+.form-container {
+    width: 100%;
+    height: 100%;
+    display: flex; /* Flexbox layout */
+    flex-direction: column; /* Align items in a column */
+    justify-content: center; /* Center items vertically */
+    align-items: center; /* Center items horizontally */
+    transition: transform 0.6s ease; /* Smooth transition */
+    transform-style: preserve-3d;
+}
+
+.form {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    padding: 20px;
+    display: flex; /* Flexbox layout */
+    flex-direction: column; /* Align items in a column */
+    justify-content: center; /* Center items vertically */
+    align-items: center; /* Center items horizontally */
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)); /* Gradient background */
+    border-radius: 20px; /* Smooth corners */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* Deeper shadow effect */
+}
+
+.login-form {
+    z-index: 2;
+}
+
+.signup-form {
+    transform: rotateY(180deg);
+}
+
+.login {
+    font-size: 36px; /* Slightly smaller for better fit */
+    font-weight: bolder;
+    color: white;
+    margin-bottom: 20px; /* Added margin for spacing */
+}
+
+.username,
+.user_id,
+.pass {
+    height: 50px; /* Taller input for better accessibility */
+    width: 100%; /* Adjust width for responsiveness */
+    font-size: 20px;
+    /* padding: 0 10px; Added padding */
+    border: 1px solid rgba(255, 255, 255, 0.5); /* Light border */
+    border-radius: 10px; /* Smooth corners */
+    background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent background */
+    color: white; /* White text color */
+    transition: border 0.3s ease; /* Smooth border transition */
+    z-index: -1;
+}
+
+.username:focus,
+.user_id:focus,
+.pass:focus {
+    border: 1px solid rgba(223, 119, 9, 1); /* Highlight border on focus */
+    outline: none; /* Remove default outline */
+}
+
+.eyeimage {
+    width: 30px;
+    cursor: pointer;
+    position: absolute;
+    z-index: 1;
+}
+
+#eyeicon {
+    position: absolute;
+    top: 235px;
+    right: 65px;
+}
+
+.login_button {
+    height: 50px; /* Taller button for better accessibility */
+    width: 80%; /* Adjust width for responsiveness */
+    background-color: rgba(223, 119, 9, 1);
+    color: white;
+    font-size: 20px;
+    font-weight: bolder;
+    margin-top: 20px; /* Space above the button */
+    margin-left: 30px;
+    border: none; /* Remove default border */
+    border-radius: 10px; /* Smooth corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease, transform 0.2s; /* Smooth transition effects */
+}
+
+.login_button:hover {
+    background-color: rgba(180, 100, 9, 1); /* Darker shade on hover */
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+.toggle {
+    color: blanchedalmond;
+    cursor: pointer;
+    text-decoration: underline;
+    margin-top: 20px; /* Space above the toggle link */
+    transition: color 0.3s ease; /* Smooth color transition */
+}
+
+.toggle:hover {
+    color: rgba(223, 119, 9, 1); /* Change color on hover */
+}
+
+#eyeicon2 {
+    position: absolute;
+    top: 235px; 
+    right: 70px; 
+}
+
+h1 {
+    margin-bottom: 20px;
+    color: white; /* White text color */
+    font-size: 40px; /* Font size */
+    text-align: center; /* Centered text */
+    font-weight: bold; /* Bold text */
+    text-transform: uppercase; /* Uppercase text */
+    letter-spacing: 1px; /* Increased spacing between letters */
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    padding: 10px; /* Padding around the text */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Deeper shadow effect */
+}
+
+#email {
+    width: 290px; /* Full width */
+    margin-top: 20px;
+}
+
+#email-pass {
+    width: 290px; /* Full width */
+    margin-top: 20px; /* Space above input */
+}
